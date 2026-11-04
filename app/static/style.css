@@ -1,0 +1,17 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: #1f2933;
+  background: #f7f8fa;
+}
+
+header h1 {
+  margin-bottom: 4px;
+}
+
+header p {
+  margin-top: 0;
+  color: #52606d;
+}
