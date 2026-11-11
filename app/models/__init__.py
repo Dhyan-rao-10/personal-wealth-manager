@@ -1,3 +1,6 @@
-# Database table models (SQLAlchemy). Import each new model module here so the
-# table is created on startup, e.g.:
-#   from app.models import asset  # noqa: F401
+"""Database table models. Every file in this folder is imported here so its tables get created."""
+import importlib
+import pkgutil
+
+for _module in pkgutil.iter_modules(__path__):
+    importlib.import_module(f"{__name__}.{_module.name}")
