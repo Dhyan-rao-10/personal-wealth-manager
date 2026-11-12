@@ -26,3 +26,14 @@ jobs:
 
       - name: Test with coverage
         run: pytest -v --cov=app --cov-report=term --cov-fail-under=70
+
+  docker-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t wealth-manager .
+
+      - name: Check the container starts
+        run: bash .github/scripts/smoke-test.sh
