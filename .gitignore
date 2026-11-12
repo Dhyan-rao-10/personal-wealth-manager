@@ -17,3 +17,6 @@ Thumbs.db
 
 # Secrets
 .env
+
+# Test coverage
+.coverage
