@@ -10,9 +10,24 @@
   <nav id="nav"></nav>
   <main>
     <h1>Dashboard</h1>
-    <p class="card">You are logged in. Your net worth summary will appear here.</p>
+    <p class="muted">Your overall position across every asset.</p>
+    <section class="card hero">
+      <p class="muted">Total net worth</p>
+      <p class="total" id="net-worth">…</p>
+    </section>
+    <section class="card">
+      <h2>Where your money is</h2>
+      <div class="bar" id="allocation-bar"></div>
+      <ul class="legend" id="allocation-legend"></ul>
+    </section>
+    <section class="card">
+      <h2>Net worth over time</h2>
+      <div id="history"></div>
+    </section>
+    <p><button type="button" class="link" id="export">Download holdings as CSV</button></p>
   </main>
   <script src="/static/api.js"></script>
   <script src="/static/nav.js"></script>
+  <script src="/static/dashboard.js"></script>
 </body>
 </html>
