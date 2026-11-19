@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Estate - Personal Wealth Manager</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Real Estate</h1>
+    <section class="card">
+      <h2>Add a property</h2>
+      <form id="record-form">
+        <label>Name <input name="name" required maxlength="100"></label>
+        <label>Type
+          <select name="type">
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="land">Land</option>
+          </select>
+        </label>
+        <label>Location <input name="location" required maxlength="200"></label>
+        <label>Purchase date <input name="purchase_date" type="date" required></label>
+        <label>Purchase price (₹) <input name="purchase_price" type="number" min="0.01" step="0.01" required></label>
+        <label>Current value (₹) <input name="current_value" type="number" min="0" step="0.01" required></label>
+        <button type="submit">Add property</button>
+      </form>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+    <section class="card table-wrap"><table id="record-table"></table></section>
+  </main>
+  <script src="/static/api.js"></script>
+  <script src="/static/nav.js"></script>
+  <script src="/static/crud.js"></script>
+  <script>
+    crudPage({
+      url: "/api/real-estate",
+      columns: [
+        ["Name", (p) => p.name],
+        ["Type", (p) => p.type],
+        ["Location", (p) => p.location],
+        ["Bought", (p) => p.purchase_date],
+        ["Purchase price", (p) => rupees(p.purchase_price)],
+        ["Current value", (p) => rupees(p.current_value)],
+        ["Gain / loss", (p) => signedRupees(p.gain_loss, p.gain_loss_percent)],
+      ],
+    });
+  </script>
+</body>
+</html>
