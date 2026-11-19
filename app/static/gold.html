@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gold - Personal Wealth Manager</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Gold</h1>
+    <section class="card">
+      <h2>Current gold price</h2>
+      <form id="price-form">
+        <label>Price per gram of 24K gold (₹)
+          <input name="price_per_gram" type="number" min="0.01" step="0.01" required>
+        </label>
+        <button type="submit">Update price</button>
+      </form>
+      <p class="muted" id="price-note"></p>
+    </section>
+    <section class="card">
+      <h2>Add a gold holding</h2>
+      <form id="record-form">
+        <label>Description <input name="description" required maxlength="100"></label>
+        <label>Form
+          <select name="form">
+            <option value="coin">Coin</option>
+            <option value="bar">Bar</option>
+            <option value="jewellery">Jewellery</option>
+            <option value="digital">Digital</option>
+          </select>
+        </label>
+        <label>Weight (grams) <input name="weight_grams" type="number" min="0.001" step="0.001" required></label>
+        <label>Purity
+          <select name="purity">
+            <option value="24K">24K</option>
+            <option value="22K">22K</option>
+            <option value="18K">18K</option>
+          </select>
+        </label>
+        <label>Purchase date <input name="purchase_date" type="date" required></label>
+        <label>Purchase price (₹) <input name="purchase_price" type="number" min="0.01" step="0.01" required></label>
+        <button type="submit">Add holding</button>
+      </form>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+    <section class="card table-wrap"><table id="record-table"></table></section>
+  </main>
+  <script src="/static/api.js"></script>
+  <script src="/static/nav.js"></script>
+  <script src="/static/crud.js"></script>
+  <script>
+    const page = crudPage({
+      url: "/api/gold",
+      columns: [
+        ["Description", (g) => g.description],
+        ["Form", (g) => g.form],
+        ["Weight (g)", (g) => g.weight_grams],
+        ["Purity", (g) => g.purity],
+        ["Bought", (g) => g.purchase_date],
+        ["Purchase price", (g) => rupees(g.purchase_price)],
+        ["Current value", (g) => rupees(g.current_value)],
+      ],
+    });
+
+    const priceForm = document.getElementById("price-form");
+    const priceNote = document.getElementById("price-note");
+
+    function showPrice(price) {
+      priceForm.elements.price_per_gram.value = price ?? "";
+      priceNote.textContent = price
+        ? `Holdings are valued at ${rupees(price)} per gram of 24K gold.`
+        : "No price set yet, so holdings are valued at what you paid.";
+    }
+
+    api("/api/gold/price").then((data) => showPrice(data.price_per_gram));
+
+    priceForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const body = Object.fromEntries(new FormData(priceForm));
+      const data = await api("/api/gold/price", { method: "PUT", body });
+      showPrice(data.price_per_gram);
+      await page.load();
+    });
+  </script>
+</body>
+</html>
