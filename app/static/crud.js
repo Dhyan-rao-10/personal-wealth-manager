@@ -41,8 +41,12 @@ function crudPage({ url, columns, onLoad }) {
     const head = el("tr", {}, ...columns.map(([title]) => el("th", { textContent: title })));
     head.append(el("th", { textContent: "Actions" }));
     const rows = records.map((record) => {
-      const row = el("tr", {}, ...columns.map(([title, format]) =>
-        el("td", { textContent: format(record) ?? "" })));
+      const row = el("tr", {}, ...columns.map(([title, format]) => {
+        const text = String(format(record) ?? "");
+        // Gains start with "+" and losses with "-", so colour them green or red.
+        const tone = text.startsWith("+") ? "gain" : text.startsWith("-") ? "loss" : "";
+        return el("td", { textContent: text, className: tone });
+      }));
       const edit = el("button", { textContent: "Edit", type: "button", className: "link" });
       const remove = el("button", { textContent: "Delete", type: "button", className: "link danger" });
       edit.addEventListener("click", () => startEdit(record));
