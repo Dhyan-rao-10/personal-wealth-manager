@@ -20,6 +20,8 @@
       className: page === current ? "active" : "",
     }));
 
+  nav.append(el("a", { className: "brand", href: "/static/dashboard.html" },
+    el("span", { className: "logo", textContent: "₹" }), "Wealth Manager"));
   pages.forEach(addLink);
   const logout = el("button", { textContent: "Log out", className: "link", type: "button" });
   logout.addEventListener("click", async () => {
